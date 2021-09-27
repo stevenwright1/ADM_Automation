@@ -1,0 +1,37 @@
+STYLEBOOK NAMESPACE/VERSION/STYLEBOOK
+com.citrix.adc.stylebooks/1.1/lb
+
+CSV COLUMNS
+targetadc
+name
+lbvirtualip
+lbvirtualport
+lbservicetype
+svcservicetype
+svcservers: list
+svcserverport
+
+TEMPLATE
+{
+    "configpack":
+    {
+	"targets": [{"id": "<<targetadc>>"}],
+	"parameters":
+	{
+                "lb-appname": "<<name>>",
+                "lb-virtual-ip": "<<lbvirtualip>>",
+                "lb-virtual-port": "<<lbvirtualport>>",
+                "lb-service-type": "<<lbservicetype>>",
+                "svc-service-type": "<<svcservicetype>>",
+                "svc-servers": [
+    		    <% for server in svcservers %>
+       		    {
+            		"port": << svcserverport >>,
+            		"ip": "<< server >>",
+            		"add-server": true
+        	    }<<,>>
+        	    <% endfor %>
+    		]
+	}
+    }
+}

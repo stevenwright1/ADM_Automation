@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 # Automatic mass creation of LB vServers using Stylebooks
 # This script was written to read values from a CSV file and automatically create LB vServers
@@ -8,6 +8,8 @@
 # Reopen Excel and save the file in "CSV" rather than "CSV (UTF8)" format, alternatively you could use vi to convert it.
 # Open the CSV in "vi", press ESC, then enter ":edit ++enc=latin1", press "x" to remove the UTF8 header at the start of file,
 # then save the file and quit (ESC, ":wq")
+
+#This script uses Python2
 
 import csv
 import http.client
