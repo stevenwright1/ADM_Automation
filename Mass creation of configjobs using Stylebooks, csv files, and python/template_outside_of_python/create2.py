@@ -60,7 +60,7 @@ def parse_csv_template(template_path):
                 stage = 1
                 continue
 
-            if stage == 1 and line !="" and line !="CSV COLUMNS":
+            if stage == 1 and line != "" and line != "CSV COLUMNS":
                 stylebook = line
 
             if line == "CSV COLUMNS":
@@ -107,7 +107,7 @@ def login_to_ADM(id, secret):
         print("Customer ID: " + customerId)
 
 
-def show_job_result(stylebook,jobid):
+def show_job_result(stylebook, jobid):
     conn = http.client.HTTPSConnection("netscalermas.cloud.com")
     payload = ""
     headers = {
@@ -115,11 +115,11 @@ def show_job_result(stylebook,jobid):
         'Content-Type': 'text/plain',
         'Cookie': 'NITRO_AUTH_TOKEN=' + sessionid
     }
-    conn.request("GET", "https://netscalermas.cloud.com/stylebook/nitro/v1/config/stylebooks/" + stylebook + "/jobs/" + jobid, payload, headers)
+    conn.request("GET", "https://netscalermas.cloud.com/stylebook/nitro/v1/config/stylebooks/" +
+                 stylebook + "/jobs/" + jobid, payload, headers)
     response = conn.getresponse()
     data = response.read()
-    print (data)
-
+    print(data)
 
 
 def select_an_ADC(sessionid):
@@ -219,11 +219,12 @@ def run(csv_path, template_path):
     stylebook, placeholders, template = parse_csv_template(template_path)
     csv_data = load_data(csv_path)
     login_to_ADM(id, secret)
-    i=1
+    i = 1
     for payload in parse_template(placeholders, csv_data, template):
-        print ("\nCreating ADM Config Pack based on CSV row: " + str(i))
+        print("\nCreating ADM Config Pack based on CSV row: " + str(i))
         create_a_config_pack_on_ADM(sessionid, payload, stylebook)
         i += 1
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -233,16 +234,18 @@ if __name__ == "__main__":
                         required=False, default="template.txt")
     parser.add_argument('-a', '--showadcs', help='Show a list of ADCs and their target IDs',
                         required=False, action='store_true')
-    parser.add_argument('-j', '--showjob', nargs=2, help='Show the result of a job_id number',
+    parser.add_argument('-j', '--showjob', nargs=2, help='Show the result of a job_id number. Takes stylebook than jobid number ./create2.py com.citrix.adc.stylebooks/1.1/lb 12345',
                         required=False, default='')
     args = parser.parse_args()
     if args.showadcs:
         login_to_ADM(id, secret)
         select_an_ADC(sessionid)
+        quit()
     if args.showjob:
-        print (args.showjob[0])
-        print (args.showjob[1])
+        print(args.showjob[0])
+        print(args.showjob[1])
         login_to_ADM(id, secret)
-        show_job_result(args.showjob[0],args.showjob[1])
+        show_job_result(args.showjob[0], args.showjob[1])
+        quit()
     else:
         run(args.csv, args.template)
